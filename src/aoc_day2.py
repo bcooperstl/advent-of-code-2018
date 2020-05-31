@@ -2,6 +2,7 @@ import aoc_day
 import fileutils
 import sys
 import collections
+import itertools
 
 class AocDay2(aoc_day.AocDay):
     def __init__(self):
@@ -21,4 +22,18 @@ class AocDay2(aoc_day.AocDay):
                 num_threes += 1
         return num_twos * num_threes
     
+    def part2(self, filename):
+        labels = fileutils.read_as_list_of_strings(filename)
+        for left, right in itertools.combinations(labels, 2):
+            num_diff=0
+            for pos in range(0,len(left)):
+                if left[pos] != right[pos]:
+                    num_diff += 1
+            if num_diff == 1:
+                ret = ""
+                for pos in range(0,len(left)):
+                    if left[pos] == right[pos]:
+                        ret = ret+left[pos]
+                return ret
+        return ""
     
