@@ -16,7 +16,7 @@ class AocTests(object):
             day = int(test[0])
             part = int(test[1])
             expected = int(test[3])
-            self.tests.append(aoc_test.AocTest(day, part, test[2], expected))
+            self.tests.append(aoc_test.AocTest(day, part, TEST_DIR+test[2], expected))
     
     def filter_tests(self, day, part):
         return [test for test in self.tests if test.day == day and test.part == part]
