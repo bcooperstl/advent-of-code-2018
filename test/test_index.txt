@@ -4,7 +4,7 @@
 1,1,day1_test3.txt,0
 1,1,day1_test4.txt,-6
 1,2,day1_test1.txt,2
-1,2,day1_test1.txt,0
-1,2,day1_test2.txt,10
-1,2,day1_test3.txt,5
-1,2,day1_test4.txt,14
+1,2,day1_test5.txt,0
+1,2,day1_test6.txt,10
+1,2,day1_test7.txt,5
+1,2,day1_test8.txt,14
