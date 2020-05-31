@@ -8,7 +8,7 @@ def read_as_list_of_strings(filename):
         print(filename, "is not a valid filename!")
         sys.exit()
     read_file = open(filename, "r")
-    file_contents = list(read_file.readlines())
+    file_contents = list(read_file.read().splitlines())
     read_file.close()
     return file_contents
 
