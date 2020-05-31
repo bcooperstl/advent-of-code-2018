@@ -19,7 +19,7 @@ program = programs.get(day)
 if program is None:
     print("Day",day,"is not defined")
     sys.exit()
-print(filename)
+
 if (filename != "tests"):
     if part == 1:
         result = program.part1(filename)
@@ -41,7 +41,7 @@ else:
             print("Part",part,"is not defined")
             sys.exit()
         if actual == test.expected_result:
-            test_summary.append("++"+test.filename+" passed with result"+str(actual))
+            test_summary.append("++"+test.filename+" passed with result="+str(actual))
         else:
             test_summary.append("--"+test.filename+" FAILED expected="+str(test.expected_result)+" actual="+str(actual))
     print("\n".join(test_summary))
