@@ -40,7 +40,7 @@ else:
         else:
             print("Part",part,"is not defined")
             sys.exit()
-        if actual == test.expected_result:
+        if str(actual) == test.expected_result:
             test_summary.append("++"+test.filename+" passed with result="+str(actual))
         else:
             test_summary.append("--"+test.filename+" FAILED expected="+str(test.expected_result)+" actual="+str(actual))

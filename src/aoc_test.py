@@ -10,4 +10,4 @@ class AocTest(object):
         self.expected_result = expected_result
     
     def compare_result(self, actual_result):
-        return self.expected_result ==  actual_result
+        return str(self.expected_result) ==  str(actual_result)

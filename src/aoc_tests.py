@@ -15,7 +15,7 @@ class AocTests(object):
         for test in test_list:
             day = int(test[0])
             part = int(test[1])
-            expected = int(test[3])
+            expected = test[3].rstrip()
             self.tests.append(aoc_test.AocTest(day, part, TEST_DIR+test[2], expected))
     
     def filter_tests(self, day, part):
