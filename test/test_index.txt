@@ -1,0 +1,5 @@
+#format is day,part,filename,expected result
+1,1,day1_test1.txt,3
+1,1,day1_test2.txt,3
+1,1,day1_test3.txt,0
+1,1,day1_test4.txt,-6
