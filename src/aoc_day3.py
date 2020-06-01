@@ -29,21 +29,29 @@ class AocDay3(aoc_day.AocDay):
     def apply_claim(self, claim, one_claim_points, multi_claim_points):
         for x in range(claim["startX"], claim["endX"]+1):
             for y in range(claim["startY"], claim["endY"]+1):
-                point = (x,y)
-                if point not in multi_claim_points:
-                    if point in one_claim_points:
-                        one_claim_points.remove(point)
-                        multi_claim_points.append(point)
+                if (not x in multi_claim_points) or (not y in multi_claim_points[x]):
+                    if (x in one_claim_points) and (y in one_claim_points[x]): # need to move x,y to multi_claim_points
+                        one_claim_points[x].remove(y)
+                        if not x in multi_claim_points:
+                            multi_claim_points[x]=[y]
+                        else:
+                            multi_claim_points[x].append(y)
                     else:
-                        one_claim_points.append(point)
+                        if not x in one_claim_points:
+                            one_claim_points[x]=[y]
+                        else:
+                            one_claim_points[x].append(y)
     
     def part1(self, filename):
         claim_lines = fileutils.read_as_list_of_strings(filename)
-        one_claim_points = []
-        multi_claim_points = []
+        one_claim_points = {}
+        multi_claim_points = {}
         for claim_line in claim_lines:
             claim = self.parse_input_line(claim_line)
             #print("Claim:",claim)
             self.apply_claim(claim, one_claim_points, multi_claim_points)
-        return len(multi_claim_points)
+        sum = 0
+        for x in multi_claim_points:
+            sum += len(multi_claim_points[x])
+        return sum
         
