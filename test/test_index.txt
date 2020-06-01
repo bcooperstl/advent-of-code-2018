@@ -10,3 +10,4 @@
 1,2,day1_test8.txt,14
 2,1,day2_test1.txt,12
 2,2,day2_test2.txt,fgij
+3,1,day3_test1.txt,4
