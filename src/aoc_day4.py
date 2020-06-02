@@ -77,4 +77,20 @@ class AocDay4(aoc_day.AocDay):
                 max_minute = i
                 max_quantity = max_summary["frequencies"][i]
         return max_summary["GuardId"]*max_minute
+
+    def part2(self, filename):
+        logs = fileutils.read_as_list_of_strings(filename)
+        logs.sort()
+        shifts = self.split_to_shifts(logs)
+        summaries = self.calc_guard_summary(shifts)
+        max_guard_id = summaries[0]["GuardId"]
+        max_times_asleep = summaries[0]["frequencies"][0]
+        max_minute = 0
+        for summary in summaries:
+            for i in range(0,60):
+                if summary["frequencies"][i] > max_times_asleep:
+                    max_minute = i
+                    max_times_asleep = summary["frequencies"][i]
+                    max_guard_id = summary["GuardId"]
+        return max_guard_id * max_minute
     
