@@ -54,4 +54,67 @@ class AocDay3(aoc_day.AocDay):
         for x in multi_claim_points:
             sum += len(multi_claim_points[x])
         return sum
+    
+    def claims_overlap(self, claim1, claim2):
+        # check each corner of claim1 to see if it is inside of claim2.
+        # If any are inside, return true
         
+        #north_west = [claim1["startX"], claim1["startY"]]
+        #north_east = [claim1["endX"], claim1["startY"]]
+        #south_west = [claim1["startX"], claim1["endY"]]
+        #south_east = [claim1["endX"], claim1["endY"]]
+        
+        if claim2["startX"] <= claim1["startX"] <= claim2["endX"] and \
+           claim2["startY"] <= claim1["startY"] <= claim2["endY"]:
+           return True
+
+        if claim2["startX"] <= claim1["endX"] <= claim2["endX"] and \
+           claim2["startY"] <= claim1["startY"] <= claim2["endY"]:
+           return True
+
+        if claim2["startX"] <= claim1["startX"] <= claim2["endX"] and \
+           claim2["startY"] <= claim1["endY"] <= claim2["endY"]:
+           return True
+
+        if claim2["startX"] <= claim1["endX"] <= claim2["endX"] and \
+           claim2["startY"] <= claim1["endY"] <= claim2["endY"]:
+           return True
+        
+        # same process for claim2 inside of claim1. Could have scenario where all of claim2 is inside claim1
+        if claim1["startX"] <= claim2["startX"] <= claim1["endX"] and \
+           claim1["startY"] <= claim2["startY"] <= claim1["endY"]:
+           return True
+
+        if claim1["startX"] <= claim2["endX"] <= claim1["endX"] and \
+           claim1["startY"] <= claim2["startY"] <= claim1["endY"]:
+           return True
+
+        if claim1["startX"] <= claim2["startX"] <= claim1["endX"] and \
+           claim1["startY"] <= claim2["endY"] <= claim1["endY"]:
+           return True
+
+        if claim1["startX"] <= claim2["endX"] <= claim1["endX"] and \
+           claim1["startY"] <= claim2["endY"] <= claim1["endY"]:
+           return True
+        
+        # still a chance that all corners could be outside 
+        return False
+    
+    def part2(self,filename):
+        claim_lines = fileutils.read_as_list_of_strings(filename)
+        claims = []
+        for claim_line in claim_lines:
+            claims.append(self.parse_input_line(claim_line))
+        for claim1 in claims:
+            overlap = False
+            for claim2 in claims:
+                if claim1["claimId"] != claim2["claimId"]:
+                    if self.claims_overlap(claim1, claim2):
+                        overlap = True
+                if overlap == True: # short circuit out of here
+                    break
+            if not overlap:
+                print("Claim",claim1["claimId"],"does not overlap any others")
+                return claim1["claimId"]
+        return 0
+# TODO: Check lines 30 and 896 for why they don't compare right
