@@ -56,48 +56,13 @@ class AocDay3(aoc_day.AocDay):
         return sum
     
     def claims_overlap(self, claim1, claim2):
-        # check each corner of claim1 to see if it is inside of claim2.
-        # If any are inside, return true
-        
-        #north_west = [claim1["startX"], claim1["startY"]]
-        #north_east = [claim1["endX"], claim1["startY"]]
-        #south_west = [claim1["startX"], claim1["endY"]]
-        #south_east = [claim1["endX"], claim1["endY"]]
-        
-        if claim2["startX"] <= claim1["startX"] <= claim2["endX"] and \
-           claim2["startY"] <= claim1["startY"] <= claim2["endY"]:
-           return True
+        # using brute force here because I would need to for a certain failing case. check for all points in claim1 if they are in claim2
+        for x in range(claim1["startX"], claim1["endX"]+1):
+            for y in range(claim1["startY"], claim1["endY"]+1):
+                if claim2["startX"] <= x <= claim2["endX"] and \
+                   claim2["startY"] <= y <= claim2["endY"]:
+                    return True
 
-        if claim2["startX"] <= claim1["endX"] <= claim2["endX"] and \
-           claim2["startY"] <= claim1["startY"] <= claim2["endY"]:
-           return True
-
-        if claim2["startX"] <= claim1["startX"] <= claim2["endX"] and \
-           claim2["startY"] <= claim1["endY"] <= claim2["endY"]:
-           return True
-
-        if claim2["startX"] <= claim1["endX"] <= claim2["endX"] and \
-           claim2["startY"] <= claim1["endY"] <= claim2["endY"]:
-           return True
-        
-        # same process for claim2 inside of claim1. Could have scenario where all of claim2 is inside claim1
-        if claim1["startX"] <= claim2["startX"] <= claim1["endX"] and \
-           claim1["startY"] <= claim2["startY"] <= claim1["endY"]:
-           return True
-
-        if claim1["startX"] <= claim2["endX"] <= claim1["endX"] and \
-           claim1["startY"] <= claim2["startY"] <= claim1["endY"]:
-           return True
-
-        if claim1["startX"] <= claim2["startX"] <= claim1["endX"] and \
-           claim1["startY"] <= claim2["endY"] <= claim1["endY"]:
-           return True
-
-        if claim1["startX"] <= claim2["endX"] <= claim1["endX"] and \
-           claim1["startY"] <= claim2["endY"] <= claim1["endY"]:
-           return True
-        
-        # still a chance that all corners could be outside 
         return False
     
     def part2(self,filename):
