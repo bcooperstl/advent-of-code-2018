@@ -14,3 +14,4 @@
 3,2,day3_test1.txt,3
 3,2,day3_test2.txt,0
 4,1,day4_test1.txt,240
+4,2,day4_test1.txt,4455
