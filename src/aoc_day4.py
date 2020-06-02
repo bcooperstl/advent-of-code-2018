@@ -51,10 +51,11 @@ class AocDay4(aoc_day.AocDay):
             frequencies = [0] * 60
             summary["GuardId"] = guardId
             for day in items:
-                for (asleep,awake) in zip(day["asleep"],day["awake"]):
-                    total_asleep += (awake-asleep)
-                    for i in range(asleep, awake):
-                        frequencies[i] += 1
+                if "asleep" in day:
+                    for (asleep,awake) in zip(day["asleep"],day["awake"]):
+                        total_asleep += (awake-asleep)
+                        for i in range(asleep, awake):
+                            frequencies[i] += 1
             summary["total_asleep"]=total_asleep
             summary["frequencies"]=frequencies
             summaries.append(summary)
