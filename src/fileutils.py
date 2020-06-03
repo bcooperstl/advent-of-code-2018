@@ -19,3 +19,7 @@ def read_as_split_strings(filename, delimiter, comment_character):
         if comment_character is not ""  and not line.startswith(comment_character):
             result.append(line.split(delimiter))
     return result
+
+def read_as_string(filename):
+    return read_as_list_of_strings(filename)[0]
+
