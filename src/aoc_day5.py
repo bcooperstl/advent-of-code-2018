@@ -6,10 +6,9 @@ class AocDay5(aoc_day.AocDay):
     def __init__(self):
         aoc_day.AocDay.__init__(self, 5)
 
-    def part1(self, filename):
+    def remove_pairs(self, input):
         upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
         lower = "abcdefghijklmnopqrstuvwxyz"
-        input = fileutils.read_as_string(filename)
         prior_length = 0
         current_length = len(input)
         while prior_length != current_length:
@@ -20,5 +19,10 @@ class AocDay5(aoc_day.AocDay):
                 input = input.replace(ul,"")
                 input = input.replace(lu,"")
             current_length = len(input)
-        return current_length
+        return input
+    
+    def part1(self, filename):
+        input = fileutils.read_as_string(filename)
+        res = self.remove_pairs(input)
+        return len(res)
 
