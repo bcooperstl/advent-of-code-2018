@@ -15,3 +15,8 @@
 3,2,day3_test2.txt,0
 4,1,day4_test1.txt,240
 4,2,day4_test1.txt,4455
+5,1,day5_test1.txt,0
+5,1,day5_test2.txt,0
+5,1,day5_test3.txt,4
+5,1,day5_test4.txt,6
+5,1,day5_test5.txt,10
