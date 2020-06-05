@@ -5,6 +5,7 @@ import aoc_day2
 import aoc_day3
 import aoc_day4
 import aoc_day5
+import aoc_day6
 
 class AocDays(object):
     def __init__(self):
@@ -14,6 +15,7 @@ class AocDays(object):
                   3:aoc_day3.AocDay3(),
                   4:aoc_day4.AocDay4(),
                   5:aoc_day5.AocDay5(),
+                  6:aoc_day6.AocDay6(),
                  }
 
     def get(self, day):
