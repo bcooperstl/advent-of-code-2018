@@ -7,8 +7,8 @@ class AocDay6(aoc_day.AocDay):
         aoc_day.AocDay.__init__(self, 6)
 
     def rescale_points_to_offset(self, original_points, offset):
-        min_x = min(x for x in original_points[0])
-        min_y = min(y for y in original_points[1])
+        min_x = min(point[0] for point in original_points)
+        min_y = min(point[1] for point in original_points)
         new_points = []
         for point in original_points:
             new_points.append([point[0]-min_x+offset, point[1]-min_y+offset])
@@ -19,6 +19,7 @@ class AocDay6(aoc_day.AocDay):
     
     # want to be able to use grid[x][y] to get the points. Need to work in column then row
     def work_grid(self, height, width, points):
+        #print("points for work_grid",points)
         grid = []
         for x in range(0,width):
             col = []
@@ -31,15 +32,20 @@ class AocDay6(aoc_day.AocDay):
                 cell['min_distance'] = self.manhattan_distance(current_point, points[0])
                 cell['min_point_index'] = 0
                 cell['min_multi'] = False
+                #print("*****",current_point,"starts with distance",cell['min_distance'],"from point",cell['min_point_index'])
                 for point_index in range(1, len(points)):
-                    distance = self.manhattan_distance([x,y], points[point_index])
+                    #if x==points[point_index][0] and y==points[point_index][1]:
+                    #    print("POINT MATCH")
+                    distance = self.manhattan_distance(current_point, points[point_index])
                     if distance < cell['min_distance']:
                         cell['min_distance'] = distance
                         cell['min_point_index'] = point_index
                         cell['min_multi'] = False
+                    #    print("          lower distance",cell['min_distance'],"from point",cell['min_point_index'])
                     elif distance == cell['min_distance']:
                         cell['min_point_index'] = None
                         cell['min_multi'] = True
+                    #    print("           same distance",cell['min_distance'],"from point",point_index)
                 col.append(cell)
             grid.append(col)
         return grid
@@ -62,11 +68,14 @@ class AocDay6(aoc_day.AocDay):
         my_points = self.rescale_points_to_offset(original_points, padding)
         grid = self.work_grid(height+padding*2, width+padding*2, my_points)
         finite_points = self.find_finite_points(grid, len(my_points))
+        #print("finite points", finite_points)
         counts = [0] * len(my_points)
         for col in grid:
             for cell in col:
+                #print(cell['x'],cell['y'],cell['min_point_index'])
                 if cell['min_point_index'] is not None and cell['min_point_index'] in finite_points:
                     counts[cell['min_point_index']] += 1
+        #print("finite points", finite_points)
         return max(counts)
     
     def part1(self, filename):
