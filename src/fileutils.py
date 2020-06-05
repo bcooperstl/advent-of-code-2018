@@ -16,7 +16,7 @@ def read_as_split_strings(filename, delimiter, comment_character):
     result = []
     raw_strings = read_as_list_of_strings(filename)
     for line in raw_strings:
-        if comment_character is not ""  and not line.startswith(comment_character):
+        if comment_character is "" or not line.startswith(comment_character):
             result.append(line.split(delimiter))
     return result
 
