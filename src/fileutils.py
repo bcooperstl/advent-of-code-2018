@@ -20,6 +20,11 @@ def read_as_split_strings(filename, delimiter, comment_character):
             result.append(line.split(delimiter))
     return result
 
+def read_as_split_integers(filename, delimiter, comment_character):
+    strings = read_as_split(filename, delimiter, comment_character)
+    result = [[int(val) for val in string] for string in strings]
+    return result
+    
 def read_as_string(filename):
     return read_as_list_of_strings(filename)[0]
 
