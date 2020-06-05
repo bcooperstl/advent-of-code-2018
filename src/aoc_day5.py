@@ -25,4 +25,14 @@ class AocDay5(aoc_day.AocDay):
         input = fileutils.read_as_string(filename)
         res = self.remove_pairs(input)
         return len(res)
-
+    
+    def part2(self, filename):
+        input = fileutils.read_as_string(filename)
+        min_length = len(input)
+        upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        lower = "abcdefghijklmnopqrstuvwxyz"
+        for i in range(0,26):
+            length = len(self.remove_pairs(input.replace(upper[i],"").replace(lower[i],"")))
+            if length < min_length:
+                min_length = length
+        return min_length
