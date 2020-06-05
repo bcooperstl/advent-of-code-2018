@@ -21,7 +21,7 @@ def read_as_split_strings(filename, delimiter, comment_character):
     return result
 
 def read_as_split_integers(filename, delimiter, comment_character):
-    strings = read_as_split(filename, delimiter, comment_character)
+    strings = read_as_split_strings(filename, delimiter, comment_character)
     result = [[int(val) for val in string] for string in strings]
     return result
     
