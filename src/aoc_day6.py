@@ -30,6 +30,7 @@ class AocDay6(aoc_day.AocDay):
                 cell['y'] = y
                 cell['edge'] = ((x in [0, width-1]) or (y in [0, height-1]))
                 cell['min_distance'] = self.manhattan_distance(current_point, points[0])
+                cell['total_distance'] = self.manhattan_distance(current_point, points[0])
                 cell['min_point_index'] = 0
                 cell['min_multi'] = False
                 #print("*****",current_point,"starts with distance",cell['min_distance'],"from point",cell['min_point_index'])
@@ -37,6 +38,7 @@ class AocDay6(aoc_day.AocDay):
                     #if x==points[point_index][0] and y==points[point_index][1]:
                     #    print("POINT MATCH")
                     distance = self.manhattan_distance(current_point, points[point_index])
+                    cell['total_distance'] += distance
                     if distance < cell['min_distance']:
                         cell['min_distance'] = distance
                         cell['min_point_index'] = point_index
@@ -91,4 +93,23 @@ class AocDay6(aoc_day.AocDay):
             print("Padding",padding,"results in max finite area of",current_max)
         
         return current_max
+    
+    def part2(self, filename, extra_args):
+        original_points = fileutils.read_as_split_integers(filename, ", ","") # comma then space is delimiter, no comments
+        max_distance = int(extra_args[0])
+        min_x = min(point[0] for point in original_points)
+        max_x = max(point[0] for point in original_points)
+        min_y = min(point[1] for point in original_points)
+        max_y = max(point[1] for point in original_points)
+        width = max_x-min_x+1
+        height = max_y-min_y+1
+        my_points = self.rescale_points_to_offset(original_points, 0)
+        grid = self.work_grid(height, width, my_points)
+
+        safe_region_count = 0
+        for col in grid:
+            for cell in col:
+                if cell['total_distance'] < max_distance:
+                    safe_region_count += 1
+        return safe_region_count
     
