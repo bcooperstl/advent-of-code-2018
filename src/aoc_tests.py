@@ -16,7 +16,9 @@ class AocTests(object):
             day = int(test[0])
             part = int(test[1])
             expected = test[3].rstrip()
-            self.tests.append(aoc_test.AocTest(day, part, TEST_DIR+test[2], expected))
+            extra_args = test[4:]
+            self.tests.append(aoc_test.AocTest(day, part, TEST_DIR+test[2], expected, extra_args))
+            
     
     def filter_tests(self, day, part):
         return [test for test in self.tests if test.day == day and test.part == part]
@@ -24,4 +26,4 @@ class AocTests(object):
 if __name__ == '__main__':
     tests = AocTests()
     for test in tests.tests:
-        print("Day", test.day, "Part", test.part, "Filename", test.filename, "Expected", test.expected_result)
+        print("Day", test.day, "Part", test.part, "Filename", test.filename, "Expected", test.expected_result, "Extra Args", test.extra_args)

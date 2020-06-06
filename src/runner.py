@@ -4,8 +4,8 @@ import sys
 import aoc_days
 import aoc_tests
 
-if len(sys.argv) != 4:
-    print("Usage: ", sys.argv[0], "day part [filename|\"tests\"")
+if len(sys.argv) < 4:
+    print("Usage: ", sys.argv[0], "day part [filename|\"tests\"] extra_arguments...")
     sys.exit()
 
 programs = aoc_days.AocDays()
@@ -14,6 +14,7 @@ tests = aoc_tests.AocTests()
 day = int(sys.argv[1])
 part = int(sys.argv[2])
 filename = sys.argv[3]
+extra_args = sys.argv[4:]
 
 program = programs.get(day)
 if program is None:
@@ -22,9 +23,9 @@ if program is None:
 
 if (filename != "tests"):
     if part == 1:
-        result = program.part1(filename)
+        result = program.part1(filename, extra_args)
     elif part == 2:
-        result = program.part2(filename)
+        result = program.part2(filename, extra_args)
     else:
         print("Part",part,"is not defined")
         sys.exit()
@@ -34,9 +35,9 @@ else:
     test_summary = []
     for test in tests.filter_tests(day, part):
         if part == 1:
-            actual = program.part1(test.filename)
+            actual = program.part1(test.filename, test.extra_args)
         elif part == 2:
-            actual = program.part2(test.filename)
+            actual = program.part2(test.filename, test.extra_args)
         else:
             print("Part",part,"is not defined")
             sys.exit()

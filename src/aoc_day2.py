@@ -8,7 +8,7 @@ class AocDay2(aoc_day.AocDay):
     def __init__(self):
         aoc_day.AocDay.__init__(self, 2)
     
-    def part1(self, filename):
+    def part1(self, filename, extra_args):
         num_twos = 0
         num_threes = 0
         labels = fileutils.read_as_list_of_strings(filename)
@@ -22,7 +22,7 @@ class AocDay2(aoc_day.AocDay):
                 num_threes += 1
         return num_twos * num_threes
     
-    def part2(self, filename):
+    def part2(self, filename, extra_args):
         labels = fileutils.read_as_list_of_strings(filename)
         for left, right in itertools.combinations(labels, 2):
             num_diff=0

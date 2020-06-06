@@ -78,7 +78,7 @@ class AocDay6(aoc_day.AocDay):
         #print("finite points", finite_points)
         return max(counts)
     
-    def part1(self, filename):
+    def part1(self, filename, extra_args):
         original_points = fileutils.read_as_split_integers(filename, ", ","") # comma then space is delimiter, no comments
         prior_max=0
         current_max = self.get_largest_finite(original_points, 0)

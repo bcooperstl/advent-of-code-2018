@@ -61,7 +61,7 @@ class AocDay4(aoc_day.AocDay):
             summaries.append(summary)
         return summaries
     
-    def part1(self, filename):
+    def part1(self, filename, extra_args):
         logs = fileutils.read_as_list_of_strings(filename)
         logs.sort()
         shifts = self.split_to_shifts(logs)
@@ -78,7 +78,7 @@ class AocDay4(aoc_day.AocDay):
                 max_quantity = max_summary["frequencies"][i]
         return max_summary["GuardId"]*max_minute
 
-    def part2(self, filename):
+    def part2(self, filename, extra_args):
         logs = fileutils.read_as_list_of_strings(filename)
         logs.sort()
         shifts = self.split_to_shifts(logs)

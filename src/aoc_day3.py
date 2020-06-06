@@ -42,7 +42,7 @@ class AocDay3(aoc_day.AocDay):
                         else:
                             one_claim_points[x].append(y)
     
-    def part1(self, filename):
+    def part1(self, filename, extra_args):
         claim_lines = fileutils.read_as_list_of_strings(filename)
         one_claim_points = {}
         multi_claim_points = {}
@@ -65,7 +65,7 @@ class AocDay3(aoc_day.AocDay):
 
         return False
     
-    def part2(self,filename):
+    def part2(self, filename, extra_args):
         claim_lines = fileutils.read_as_list_of_strings(filename)
         claims = []
         for claim_line in claim_lines:

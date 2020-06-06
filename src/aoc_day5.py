@@ -21,12 +21,12 @@ class AocDay5(aoc_day.AocDay):
             current_length = len(input)
         return input
     
-    def part1(self, filename):
+    def part1(self, filename, extra_args):
         input = fileutils.read_as_string(filename)
         res = self.remove_pairs(input)
         return len(res)
     
-    def part2(self, filename):
+    def part2(self, filename, extra_args):
         input = fileutils.read_as_string(filename)
         min_length = len(input)
         upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"

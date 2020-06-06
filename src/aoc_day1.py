@@ -8,7 +8,7 @@ class AocDay1(aoc_day.AocDay):
     def __init__(self):
         aoc_day.AocDay.__init__(self, 1)
     
-    def part1(self, filename):
+    def part1(self, filename, extra_args):
         total = 0
         values = fileutils.read_as_list_of_strings(filename)
         for value in values:
@@ -30,7 +30,7 @@ class AocDay1(aoc_day.AocDay):
             print("Invalid input",str)
             sys.exit()
     
-    def part2(self, filename):
+    def part2(self, filename, extra_args):
         total = 0
         totals = set()
         totals.add(0)
