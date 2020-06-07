@@ -23,3 +23,4 @@
 5,2,day5_test5.txt,4
 6,1,day6_test1.txt,17
 6,2,day6_test1.txt,16,32
+7,1,day7_test1.txt,CABDFE
