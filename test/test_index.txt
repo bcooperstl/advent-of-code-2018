@@ -22,5 +22,8 @@
 5,1,day5_test5.txt,10
 5,2,day5_test5.txt,4
 6,1,day6_test1.txt,17
+#32 is max distance
 6,2,day6_test1.txt,16,32
 7,1,day7_test1.txt,CABDFE
+#2 is num_workers, 0 is extra_time_seconds
+7,2,day7_test1.txt,CABFDE,2,0
