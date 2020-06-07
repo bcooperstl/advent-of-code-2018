@@ -52,6 +52,7 @@ class AocDay7(aoc_day.AocDay):
                     all_values[c]={"letter":c, "time":ord(c)-ord('A')+1+extra_time}
             requirements[instruction[7]].append(instruction[1])
         print("All values",all_values)
+        print("Requirements", requirements)
         num_assigned = 0
         while all_values or num_assigned>0:
             print("Time:",time)
@@ -69,6 +70,8 @@ class AocDay7(aoc_day.AocDay):
 
             # find available jobs and assign them to any free workers
             avail_steps = sorted(list(filter(lambda x: requirements[x] == [], all_values.keys())))
+            if avail_steps:
+                print("Available steps:",avail_steps)
             for step in avail_steps:
                 for worker in workers:
                     if worker["job"]=="":
@@ -80,4 +83,4 @@ class AocDay7(aoc_day.AocDay):
                         num_assigned += 1
                         break #do not assign this step to multiple wokers
             time += 1
-        return ''.join(steps)
+        return time-1

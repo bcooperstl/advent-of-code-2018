@@ -26,4 +26,4 @@
 6,2,day6_test1.txt,16,32
 7,1,day7_test1.txt,CABDFE
 #2 is num_workers, 0 is extra_time_seconds
-7,2,day7_test1.txt,CABFDE,2,0
+7,2,day7_test1.txt,15,2,0
