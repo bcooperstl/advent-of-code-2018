@@ -32,8 +32,29 @@ class AocDay8(aoc_day.AocDay):
             sum += self.sum_metadata(child_node)
         return sum
     
+    def calc_node_values(self, node):
+        # need to do this depth first since nodes values can depend on childs nodes values
+        for child_node in node["child_nodes"]:
+            self.calc_node_values(child_node)
+        
+        if node["header"]["child_node_qty"] == 0:
+            node["value"]=sum(node["metadata"])
+        else:
+            value_calc = 0
+            for index in node["metadata"]:
+                if 1 <= index <= node["header"]["child_node_qty"]:
+                    value_calc += node["child_nodes"][index-1]["value"]
+            node["value"]=value_calc
+    
     def part1(self, filename, extra_args):
         data = fileutils.read_as_split_integers_one_line(filename, " ","") # space is delimiter, no comments
         nodes, used = self.build_nodes(data, 0)
         sum = self.sum_metadata(nodes)
         return sum
+
+    def part2(self, filename, extra_args):
+        data = fileutils.read_as_split_integers_one_line(filename, " ","") # space is delimiter, no comments
+        root_node, used = self.build_nodes(data, 0)
+        sum = self.sum_metadata(root_node)
+        self.calc_node_values(root_node)
+        return root_node["value"]
