@@ -28,5 +28,8 @@ def read_as_split_integers(filename, delimiter, comment_character):
 def read_as_string(filename):
     return read_as_list_of_strings(filename)[0]
 
+def read_as_split_strings_one_line(filename, delimiter, comment_character):
+	return read_as_split_strings(filename, delimiter, comment_character)[0]
+    
 def read_as_split_integers_one_line(filename, delimiter, comment_character):
 	return read_as_split_integers(filename, delimiter, comment_character)[0]
