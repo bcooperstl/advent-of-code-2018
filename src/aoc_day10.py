@@ -22,6 +22,7 @@ class AocDay10(aoc_day.AocDay):
             point = {"posX":values[0], "posY":values[1], "velX":values[2], "velY":values[3]}
             points.append(point)
         shouldRun = True
+        time = 0
         while shouldRun:
             minX = points[0]["posX"] + points[0]["velX"]
             maxX = points[0]["posX"] + points[0]["velX"]
@@ -46,5 +47,10 @@ class AocDay10(aoc_day.AocDay):
                 action = input("> ")
                 if action == "q":
                     shouldRun = False
+                    print("Elapsed time is",time,"seconds")
                 elif action == "d":
                     self.displayIt(minX, maxX, minY, maxY, points)
+            time +=1
+
+    def part2(self, filename, extra_args):
+        self.part1(filename, extra_args)
