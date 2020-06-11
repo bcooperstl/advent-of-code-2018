@@ -22,6 +22,5 @@ class AocScreen(object):
         if not self.minY <= y <= self.maxY:
             print("y value ",y,"is out of range(",self.minY,",",self.maxY,")")
             sys.exit()
-        print("Settings (",x,",",y,") to value:",value)
         self.textmap[y-self.minY][x-self.minX]=value
     
