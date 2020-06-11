@@ -35,3 +35,4 @@
 9,1,day9_test4.txt,2764
 9,1,day9_test5.txt,54718
 9,1,day9_test6.txt,37305
+9,2,day9_test1.txt,22563
