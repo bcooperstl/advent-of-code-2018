@@ -11,7 +11,7 @@ class AocTests(object):
         self.load_tests()
         
     def load_tests(self):
-        test_list = fileutils.read_as_split_strings(TEST_INDEX_FILE, ",", "#") # CSV file with comments starting with #
+        test_list = fileutils.read_as_split_strings(TEST_INDEX_FILE, "|", "#") # CSV file with comments starting with #
         for test in test_list:
             day = int(test[0])
             part = int(test[1])
