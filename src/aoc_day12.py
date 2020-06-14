@@ -16,6 +16,13 @@ class AocDay12(aoc_day.AocDay):
             map[line[0]]=line[2]
         return map
     
+    def calculate_pot_sum(self, current_pots, start_val):
+        sum = 0
+        for i in range(0,len(current_pots)):
+            if current_pots[i] == '#':
+                sum += (i + start_val)
+        return sum    
+    
     def part1(self, filename, extra_args):
         data = fileutils.read_as_split_strings(filename, " ","") # space is delimiter, no comments
         current="...."+data[0][2]+"...." #prepend and append 4 empty pots. will evaulate from 2 before to 2 after
@@ -34,10 +41,31 @@ class AocDay12(aoc_day.AocDay):
                 next.append('.')
             current="".join(next)
             print("Gen",i,": length",len(current),"indexed from", start_val,"to",len(current)+start_val-1,current)
-        sum = 0
-        for i in range(0,len(current)):
-            if current[i] == '#':
-                sum += (i + start_val)
-        return sum
+        return self.calculate_pot_sum(current, start_val)
         
+    def part2(self, filename, extra_args):
+        data = fileutils.read_as_split_strings(filename, " ","") # space is delimiter, no comments
+        current="...."+data[0][2]+"...." #prepend and append 4 empty pots. will evaulate from 2 before to 2 after
+        start_val=-4
+        notes=self.build_map(data[2:])
         
+        prev_sum=0
+        sum=0
+        print("Gen 0: length",len(current),"indexed from", start_val,"to",len(current)+start_val-1,current)
+        for i in range(1,10001):
+            next=list(current)
+            for c in range(0,len(current)-4):
+                next[c+2]=notes[current[c:c+5]]
+            while next[0]!='.' or next[1]!='.' or next[2]!='.' or next[3]!='.':
+                next.insert(0,'.')
+                start_val -= 1
+            while next[-1]!='.' or next[-2]!='.' or next[-3]!='.' or next[-4]!='.':
+                next.append('.')
+            current="".join(next)
+            prev_sum = sum
+            sum = self.calculate_pot_sum(current, start_val)
+            sum_change = sum - prev_sum
+            print("Gen",i,": length",len(current),"indexed from", start_val,"to",len(current)+start_val-1,"Sum:",sum,"Change:",sum_change,current)
+        return self.calculate_pot_sum(current, start_val)
+        
+                
