@@ -11,6 +11,18 @@ class AocScreen(object):
         self.startChar = startChar
         self.textmap = [[startChar] * self.width for i in range(self.height)]
         
+    def load(self, data):
+        self.minY=0
+        self.maxY=len(data)-1
+        self.height=len(data)
+        self.minX=0
+        self.maxX=len(data[0])-1
+        self.width=len(data[0])
+        self.textmap = [[self.startChar] * self.width for i in range(self.height)]
+        for y in range(0,self.height):
+            for x in range(0,self.width):
+                self.textmap[y][x]=data[y][x]
+
     def display(self):
         for line in self.textmap:
             print("".join(line))
