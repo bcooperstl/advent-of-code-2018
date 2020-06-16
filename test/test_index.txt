@@ -43,3 +43,4 @@
 12|1|day12_test1.txt|325
 13|1|day13_test1.txt|0,3
 13|1|day13_test2.txt|7,3
+13|2|day13_test3.txt|6,4
