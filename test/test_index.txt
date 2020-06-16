@@ -41,3 +41,5 @@
 11|2|/dev/null|90,269,16|18
 11|2|/dev/null|232,251,12|42
 12|1|day12_test1.txt|325
+13|1|day13_test1.txt|0,3
+13|1|day13_test2.txt|7,3
