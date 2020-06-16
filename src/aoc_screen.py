@@ -27,6 +27,9 @@ class AocScreen(object):
         for line in self.textmap:
             print("".join(line))
     
+    def get(self, x, y):
+        return self.textmap[y][x]
+    
     def set(self, x, y, value):
         if not self.minX <= x <= self.maxX:
             print("x value ",x,"is out of range(",self.minX,",",self.maxX,")")

@@ -10,9 +10,26 @@ class AocDay13(aoc_day.AocDay):
     
     cart_chars = [">", "<", "v", "^"]
     cart_track_replacement = {">":"-", "<":"-", "v":"|", "^":"|"}
-    cart_char_directions = {">":"east", "east":">", "<":"west", "west":"<", \
-                            "^":"north", "north":"^", "v":"south", "south":"v"}
-    direction_next_offsets = {"east":{"x":1,"y":0}, "west":{"x":-1,"y":0}, "north":{"x":0,"y":-1}, "south":{"x":0,"y":1}}
+    cart_char_directions = {">":"right", "right":">", "<":"left", "left":"<", \
+                            "^":"up", "up":"^", "v":"down", "down":"v"}
+    direction_next_offsets = {"right":{"x":1,"y":0}, "left":{"x":-1,"y":0}, "up":{"x":0,"y":-1}, "down":{"x":0,"y":1}}
+    
+    direction_corners = {"right":{"\\":"down", "/":"up"}, \
+                         "left":{"\\":"up", "/":"down"}, \
+                         "up":{"\\":"left", "/":"right"}, \
+                         "down":{"\\":"right", "/":"left"}, }
+    
+    # order in this array is for left, straight, right
+    direction_intersection = {"right":["up","right","down"], \
+                              "left":["down","left","up"], \
+                              "up":["left","up","right"], \
+                              "down":["right","down","left"], }
+    
+    def is_corner(self, c):
+        return c in ["\\","/"]
+    
+    def is_intersection(self, c):
+        return c == "+"
     
     def split_carts_from_map(self, map, carts_map):
         carts = []
@@ -21,10 +38,42 @@ class AocDay13(aoc_day.AocDay):
                 if map.textmap[y][x] in self.cart_chars:
                     char = map.textmap[y][x]
                     carts_map.set(x,y,char)
-                    cart = {"x":x, "y":y, "direction":self.cart_char_directions[char]}
+                    cart = {"x":x, "y":y, "direction":self.cart_char_directions[char], "num_turns":0}
                     carts.append(cart)
                     map.set(x,y,self.cart_track_replacement[char])
         return carts
+    
+    def is_collision(self, x, y, carts):
+        for cart in carts:
+            if x == cart["x"] and y == cart["y"]:
+                return True
+        return False
+    
+    # return (False, None) if no collisions
+    # return (True, collision_cart) if a collision has occurred    
+    def work_tick(self, map, carts_map, carts):
+        sorted_carts = sorted(carts, key=lambda c:(c["y"],c["x"]))
+        for cart in sorted_carts:
+            next_x = cart["x"] + self.direction_next_offsets[cart["direction"]]["x"]
+            next_y = cart["y"] + self.direction_next_offsets[cart["direction"]]["y"]
+            next_direction = cart["direction"]
+            track = map.get(next_x, next_y)
+            if self.is_corner(track):
+                next_direction = self.direction_corners[cart["direction"]][track]
+            elif self.is_intersection(track):
+                next_direction = self.direction_intersection[cart["direction"]][cart["num_turns"]%3]
+                cart["num_turns"] += 1
+            print("Cart facing",cart["direction"],"at (",cart["x"],",",cart["y"],") moving to (",next_x,",",next_y,") facing",next_direction)
+            carts_map.clear(cart["x"], cart["y"])
+            carts_map.set(next_x, next_y, self.cart_char_directions[cart["direction"]])
+            collision = self.is_collision(next_x, next_y, carts)
+            cart["x"] = next_x
+            cart["y"] = next_y
+            cart["direction"] = next_direction
+            if collision:
+                carts_map.set(next_x, next_y, 'X')
+                return [True, cart]
+        return [False, None]
     
     def part1(self, filename, extra_args):
         instructions = fileutils.read_as_list_of_strings(filename)
@@ -39,3 +88,19 @@ class AocDay13(aoc_day.AocDay):
         print("Overlaid map:")
         carts_map.display_overlay()
         print("Carts details:", carts)
+        collision = False
+        tick_count = 0
+        while not collision:
+            tick_count += 1
+            collision, collision_cart = self.work_tick(map, carts_map, carts)
+            print(collision)
+            print("***Tick",tick_count)
+            print("Base map:")
+            map.display()
+            print("Carts only map:")
+            carts_map.display()
+            print("Overlaid map:")
+            carts_map.display_overlay()
+            print("Carts details:", carts)
+        return str(collision_cart["x"])+","+str(collision_cart["y"])
+    
