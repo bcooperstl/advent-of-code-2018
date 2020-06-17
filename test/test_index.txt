@@ -44,3 +44,8 @@
 13|1|day13_test1.txt|0,3
 13|1|day13_test2.txt|7,3
 13|2|day13_test3.txt|6,4
+# parameter is number of recipes
+14|1|/dev/null/|5158916779|9
+14|1|/dev/null/|0124515891|5
+14|1|/dev/null/|9251071085|18
+14|1|/dev/null/|5941429882|2018
