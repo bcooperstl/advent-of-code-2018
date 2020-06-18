@@ -146,7 +146,14 @@ class AocDay15(aoc_day.AocDay):
             print("Friends:", friends)
             print("Foes:", foes)
             move_target = self.find_target_point(unit, foes, units_map)
-            next_step = self.find_next_step(unit, move_target, units_map)
+            if move_target !=  None:
+                next_step = self.find_next_step(unit, move_target, units_map)
+                units_map.clear(unit["x"],unit["y"])
+                unit["x"]=next_step[0]
+                unit["y"]=next_step[1]
+                units_map.set(unit["x"],unit["y"],unit["type"])
+            print("Post Move:")
+            units_map.display_overlay()
             #remove this. just for testing
             break
         return False
