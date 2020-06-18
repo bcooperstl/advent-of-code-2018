@@ -53,3 +53,9 @@
 14|2|/dev/null/|5|01245
 14|2|/dev/null/|18|92510
 14|2|/dev/null/|2018|59414
+15|1|day15_test1.txt|27730
+15|1|day15_test2.txt|36334
+15|1|day15_test3.txt|39514
+15|1|day15_test4.txt|27755
+15|1|day15_test5.txt|28944
+15|1|day15_test6.txt|18740
