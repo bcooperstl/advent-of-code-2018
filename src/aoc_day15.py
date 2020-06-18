@@ -15,6 +15,7 @@ class AocDay15(aoc_day.AocDay):
     REACHABLE = "@"
     NEAREST = "!"
     CHOSEN = "+"
+    STEP = "*"
     
     opposite_unit_type = {GOBLIN:ELF, ELF:GOBLIN}
     
@@ -42,13 +43,14 @@ class AocDay15(aoc_day.AocDay):
                 return False
         return True
     
+    # return in reading order - up, left, right, down
     def get_neighbor_points(self, point):
-        return [(point[0]-1, point[1]), (point[0]+1, point[1]), (point[0], point[1]-1), (point[0], point[1]+1)]
+        return [(point[0], point[1]-1), (point[0]-1, point[1]), (point[0]+1, point[1]), (point[0], point[1]+1)]
     
-    def get_distances_to_open_points(self, unit, units_map):
+    def get_distances_to_open_points(self, point, units_map):
         current_distance = 0
-        distances = {(unit["x"],unit["y"]):current_distance}
-        last_round = [ (unit["x"],unit["y"]) ]
+        distances = {point:current_distance}
+        last_round = [ point ]
         while last_round:
             current_round = []
             current_distance += 1
@@ -59,8 +61,7 @@ class AocDay15(aoc_day.AocDay):
                         current_round.append(neighbor)
             last_round = current_round            
         return distances
-        
-    
+            
     def find_target_point(self, unit, foes, units_map):
         print("Units:")
         units_map.display_overlay()
@@ -79,7 +80,7 @@ class AocDay15(aoc_day.AocDay):
             return None
         
         #find reachable
-        distances_from_unit = self.get_distances_to_open_points(unit, units_map)
+        distances_from_unit = self.get_distances_to_open_points((unit["x"], unit["y"]), units_map)
         reachable_targets = []
         for target in in_range_targets:
             if target in distances_from_unit:
@@ -114,7 +115,22 @@ class AocDay15(aoc_day.AocDay):
         
         return chosen_target
         
+    def find_next_step(self, unit, target_point, units_map):
+        distances_from_target = self.get_distances_to_open_points(target_point, units_map)
+        min_distance = 0
+        next_step = None
+        # get_neighbor_points returns in reading order. helps to resolve ties
+        for point in self.get_neighbor_points((unit["x"],unit["y"])):
+            if point in distances_from_target and (next_step is None or distances_from_target[point] < min_distance):
+                min_distance = distances_from_target[point]
+                next_step = point
+        
+        print("Next Step:")
+        step_map = aoc_screen_overlay.AocScreenOverlay(units_map)
+        step_map.set(next_step[0], next_step[1], self.STEP)
+        step_map.display_overlay()
 
+        return next_step
     
     #return true for all units completed or false for combat ended
     def run_round(self, map, units):
@@ -130,6 +146,7 @@ class AocDay15(aoc_day.AocDay):
             print("Friends:", friends)
             print("Foes:", foes)
             move_target = self.find_target_point(unit, foes, units_map)
+            next_step = self.find_next_step(unit, move_target, units_map)
             #remove this. just for testing
             break
         return False
