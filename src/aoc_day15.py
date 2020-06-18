@@ -62,9 +62,16 @@ class AocDay15(aoc_day.AocDay):
             last_round = current_round            
         return distances
             
-    def find_target_point(self, unit, foes, units_map):
+    def find_move_target_point(self, unit, foes, units_map):
         print("Units:")
         units_map.display_overlay()
+        
+        # short circuit to return None if there is a foe next to the unit
+        unit_neighbor_points = self.get_neighbor_points((unit["x"],unit["y"]))
+        for foe in foes:
+            if (foe["x"],foe["y"]) in unit_neighbor_points:
+                print("Unit at (",unit["x"],",",unit["y"],") is already next to foe at (",foe["x"],",",foe["y"],"). Not moving")
+                return None
         
         # find in range
         in_range_targets = []
@@ -145,7 +152,7 @@ class AocDay15(aoc_day.AocDay):
             foes = list(filter(lambda u:u["type"]!=unit["type"], units))
             print("Friends:", friends)
             print("Foes:", foes)
-            move_target = self.find_target_point(unit, foes, units_map)
+            move_target = self.find_move_target_point(unit, foes, units_map)
             if move_target !=  None:
                 next_step = self.find_next_step(unit, move_target, units_map)
                 units_map.clear(unit["x"],unit["y"])
@@ -155,7 +162,8 @@ class AocDay15(aoc_day.AocDay):
             print("Post Move:")
             units_map.display_overlay()
             #remove this. just for testing
-            break
+        input("> ")
+        return True
         return False
         
     
@@ -170,6 +178,6 @@ class AocDay15(aoc_day.AocDay):
         map.display()
         full_rounds = 0
         while self.run_round(map, units):
-            full_counts += 1
+            full_rounds += 1
         return full_rounds
     
