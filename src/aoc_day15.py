@@ -16,6 +16,8 @@ class AocDay15(aoc_day.AocDay):
     NEAREST = "!"
     CHOSEN = "+"
     STEP = "*"
+    ATTACK_POWER = 3
+    START_HITPOINTS = 200
     
     opposite_unit_type = {GOBLIN:ELF, ELF:GOBLIN}
     
@@ -25,7 +27,7 @@ class AocDay15(aoc_day.AocDay):
         for y in range(0,map.height):
             for x in range(0,map.width):
                 if map.get(x,y) in [self.GOBLIN, self.ELF]:
-                    units.append({"id":len(units)+1, "x":x, "y":y, "type":map.get(x,y), "hitpoints":200})
+                    units.append({"id":len(units)+1, "x":x, "y":y, "type":map.get(x,y), "hitpoints":self.START_HITPOINTS})
                     map.set(x,y,self.OPEN)
         return units
     
@@ -139,19 +141,34 @@ class AocDay15(aoc_day.AocDay):
 
         return next_step
     
+    def find_attack_target(self, unit, foes, units_map):
+        possible_targets = self.get_neighbor_points((unit["x"],unit["y"]))
+        attack_target = None
+        for point in possible_targets:
+            for foe in foes:
+                if (point == (foe["x"],foe["y"]) and (attack_target is None or foe["hitpoints"] < attack_target["hitpoints"] )):
+                    attack_target = foe
+        return attack_target
+    
     #return true for all units completed or false for combat ended
     def run_round(self, map, units):
         #sort the units in reading order, which is how they will go in this round
         round_units  = sorted(units, key=lambda u:(u["y"],u["x"]))
         for unit in round_units:
+            if unit["hitpoints"] <= 0:
+                continue
             units_map = aoc_screen_overlay.AocScreenOverlay(map)
             for u in units:
-                units_map.set(u["x"], u["y"], u["type"])
+                if u["hitpoints"] > 0:
+                    units_map.set(u["x"], u["y"], u["type"])
             print("Working on unit", unit)
-            friends = list(filter(lambda u:u["type"]==unit["type"] and u["id"]!=unit["id"], units))
-            foes = list(filter(lambda u:u["type"]!=unit["type"], units))
+            friends = list(filter(lambda u:u["type"]==unit["type"] and u["id"]!=unit["id"] and u["hitpoints"] > 0, units))
+            foes = list(filter(lambda u:u["type"]!=unit["type"] and u["hitpoints"] > 0, units))
             print("Friends:", friends)
             print("Foes:", foes)
+            if len(foes) == 0:
+                print("No foes remaining. Game is over")
+                return False
             move_target = self.find_move_target_point(unit, foes, units_map)
             if move_target !=  None:
                 next_step = self.find_next_step(unit, move_target, units_map)
@@ -161,11 +178,19 @@ class AocDay15(aoc_day.AocDay):
                 units_map.set(unit["x"],unit["y"],unit["type"])
             print("Post Move:")
             units_map.display_overlay()
-            #remove this. just for testing
-        input("> ")
+            attack_target = self.find_attack_target(unit, foes, units_map)
+            if attack_target != None:
+                attack_target["hitpoints"] -= self.ATTACK_POWER
+                if attack_target["hitpoints"] <= 0:
+                    print("Unit",attack_target["id"],"at (",attack_target["x"],",",attack_target["y"],") killed")
         return True
-        return False
         
+    def sum_alive_hitpoints(self, units):
+        sum = 0
+        for unit in units:
+            if unit["hitpoints"] > 0:
+                sum += unit["hitpoints"]
+        return sum
     
     def part1(self, filename, extra_args):
         battlefield = fileutils.read_as_list_of_strings(filename)
@@ -176,8 +201,31 @@ class AocDay15(aoc_day.AocDay):
         units = self.get_initial_units(map)
         print("Cleaned map:")
         map.display()
+        units_map = aoc_screen_overlay.AocScreenOverlay(map)
+        for u in units:
+            units_map.set(u["x"], u["y"], u["type"])
+        print("Initial Map:")
+        units_map.display_overlay()
         full_rounds = 0
         while self.run_round(map, units):
             full_rounds += 1
-        return full_rounds
+            print("After round",full_rounds,":")
+            units_map = aoc_screen_overlay.AocScreenOverlay(map)
+            for u in units:
+                if u["hitpoints"] > 0:
+                    units_map.set(u["x"], u["y"], u["type"])
+            units_map.display_overlay()
+            print(units)
+            #remove this. just for testing
+            #input("> ")
+        
+        units_map = aoc_screen_overlay.AocScreenOverlay(map)
+        for u in units:
+            if u["hitpoints"] > 0:
+                units_map.set(u["x"], u["y"], u["type"])
+        units_map.display_overlay()
+        print(units)
+        hitpoints = self.sum_alive_hitpoints(units);
+        print("Rounds=",full_rounds,"Hitpoints=",hitpoints)
+        return full_rounds*hitpoints
     
