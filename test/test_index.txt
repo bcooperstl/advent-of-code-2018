@@ -59,3 +59,8 @@
 15|1|day15_test4.txt|27755
 15|1|day15_test5.txt|28944
 15|1|day15_test6.txt|18740
+15|2|day15_test1.txt|4988
+15|2|day15_test3.txt|31284
+15|2|day15_test4.txt|3478
+15|2|day15_test5.txt|6474
+15|2|day15_test6.txt|1140
