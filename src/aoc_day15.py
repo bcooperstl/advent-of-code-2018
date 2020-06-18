@@ -81,10 +81,10 @@ class AocDay15(aoc_day.AocDay):
             for point in self.get_neighbor_points((foe["x"],foe["y"])):
                 if units_map.get(point[0], point[1]) == self.OPEN and point not in in_range_targets:
                     in_range_targets.append(point)
-        print("In Range:")
-        in_range_map = aoc_screen_overlay.AocScreenOverlay(units_map)
-        in_range_map.set_multi(in_range_targets, self.IN_RANGE)
-        in_range_map.display_overlay()
+        #print("In Range:")
+        #in_range_map = aoc_screen_overlay.AocScreenOverlay(units_map)
+        #in_range_map.set_multi(in_range_targets, self.IN_RANGE)
+        #in_range_map.display_overlay()
         if not in_range_targets:
             return None
         
@@ -94,10 +94,10 @@ class AocDay15(aoc_day.AocDay):
         for target in in_range_targets:
             if target in distances_from_unit:
                 reachable_targets.append(target)
-        print("Reachable:")
-        reachable_map = aoc_screen_overlay.AocScreenOverlay(units_map)
-        reachable_map.set_multi(reachable_targets, self.REACHABLE)
-        reachable_map.display_overlay()
+        #print("Reachable:")
+        #reachable_map = aoc_screen_overlay.AocScreenOverlay(units_map)
+        #reachable_map.set_multi(reachable_targets, self.REACHABLE)
+        #reachable_map.display_overlay()
         if not reachable_targets:
             return None
         
@@ -110,17 +110,17 @@ class AocDay15(aoc_day.AocDay):
                 nearest_targets.clear()
             if distances_from_unit[target] == min_distance:
                 nearest_targets.append(target)
-        print("Nearest:")
-        nearest_map = aoc_screen_overlay.AocScreenOverlay(units_map)
-        nearest_map.set_multi(nearest_targets, self.NEAREST)
-        nearest_map.display_overlay()
+        #print("Nearest:")
+        #nearest_map = aoc_screen_overlay.AocScreenOverlay(units_map)
+        #nearest_map.set_multi(nearest_targets, self.NEAREST)
+        #nearest_map.display_overlay()
         
         #find chosen
         chosen_target = sorted(nearest_targets, key=lambda t:(t[1],t[0]))[0]
-        print("Chosen:")
-        chosen_map = aoc_screen_overlay.AocScreenOverlay(units_map)
-        chosen_map.set(chosen_target[0], chosen_target[1], self.CHOSEN)
-        chosen_map.display_overlay()
+        #print("Chosen:")
+        #chosen_map = aoc_screen_overlay.AocScreenOverlay(units_map)
+        #chosen_map.set(chosen_target[0], chosen_target[1], self.CHOSEN)
+        #chosen_map.display_overlay()
         
         return chosen_target
         
@@ -134,10 +134,10 @@ class AocDay15(aoc_day.AocDay):
                 min_distance = distances_from_target[point]
                 next_step = point
         
-        print("Next Step:")
-        step_map = aoc_screen_overlay.AocScreenOverlay(units_map)
-        step_map.set(next_step[0], next_step[1], self.STEP)
-        step_map.display_overlay()
+        #print("Next Step:")
+        #step_map = aoc_screen_overlay.AocScreenOverlay(units_map)
+        #step_map.set(next_step[0], next_step[1], self.STEP)
+        #step_map.display_overlay()
 
         return next_step
     
@@ -151,7 +151,8 @@ class AocDay15(aoc_day.AocDay):
         return attack_target
     
     #return true for all units completed or false for combat ended
-    def run_round(self, map, units):
+    def run_round(self, map, units, elf_attack_power):
+        attack_powers = {self.GOBLIN:self.ATTACK_POWER,self.ELF:elf_attack_power}
         #sort the units in reading order, which is how they will go in this round
         round_units  = sorted(units, key=lambda u:(u["y"],u["x"]))
         for unit in round_units:
@@ -176,11 +177,11 @@ class AocDay15(aoc_day.AocDay):
                 unit["x"]=next_step[0]
                 unit["y"]=next_step[1]
                 units_map.set(unit["x"],unit["y"],unit["type"])
-            print("Post Move:")
-            units_map.display_overlay()
+            #print("Post Move:")
+            #units_map.display_overlay()
             attack_target = self.find_attack_target(unit, foes, units_map)
             if attack_target != None:
-                attack_target["hitpoints"] -= self.ATTACK_POWER
+                attack_target["hitpoints"] -= attack_powers[unit["type"]]
                 if attack_target["hitpoints"] <= 0:
                     print("Unit",attack_target["id"],"at (",attack_target["x"],",",attack_target["y"],") killed")
         return True
@@ -207,7 +208,7 @@ class AocDay15(aoc_day.AocDay):
         print("Initial Map:")
         units_map.display_overlay()
         full_rounds = 0
-        while self.run_round(map, units):
+        while self.run_round(map, units, self.ATTACK_POWER):
             full_rounds += 1
             print("After round",full_rounds,":")
             units_map = aoc_screen_overlay.AocScreenOverlay(map)
@@ -228,4 +229,55 @@ class AocDay15(aoc_day.AocDay):
         hitpoints = self.sum_alive_hitpoints(units);
         print("Rounds=",full_rounds,"Hitpoints=",hitpoints)
         return full_rounds*hitpoints
+
+    def run_part2(self, battlefield, elf_attack_power):
+        map = aoc_screen.AocScreen(' ')
+        map.load(battlefield)
+        print("Initial map:")
+        map.display()
+        units = self.get_initial_units(map)
+        print("Cleaned map:")
+        map.display()
+        units_map = aoc_screen_overlay.AocScreenOverlay(map)
+        for u in units:
+            units_map.set(u["x"], u["y"], u["type"])
+        print("Initial Map:")
+        units_map.display_overlay()
+        full_rounds = 0
+        while self.run_round(map, units, elf_attack_power):
+            for unit in units:
+                if unit["type"]==self.ELF and unit["hitpoints"] <= 0:
+                    return [False, 0]
+            full_rounds += 1
+            print("After round",full_rounds,":")
+            units_map = aoc_screen_overlay.AocScreenOverlay(map)
+            for u in units:
+                if u["hitpoints"] > 0:
+                    units_map.set(u["x"], u["y"], u["type"])
+            units_map.display_overlay()
+            print(units)
+            #remove this. just for testing
+            #input("> ")
+        
+        units_map = aoc_screen_overlay.AocScreenOverlay(map)
+        for u in units:
+            if u["type"]==self.ELF and u["hitpoints"] <= 0:
+                return [False, 0]
+            if u["hitpoints"] > 0:
+                units_map.set(u["x"], u["y"], u["type"])
+        units_map.display_overlay()
+        print(units)
+        hitpoints = self.sum_alive_hitpoints(units);
+        print("Rounds=",full_rounds,"Hitpoints=",hitpoints)
+        return [True, full_rounds*hitpoints]
     
+    def part2(self, filename, extra_args):
+        battlefield = fileutils.read_as_list_of_strings(filename)
+        elf_attack_power = self.ATTACK_POWER
+        result = self.run_part2(battlefield, elf_attack_power)
+        while not result[0]:
+            elf_attack_power += 1
+            result = self.run_part2(battlefield, elf_attack_power)
+        print("No elf deaths with elf_attack_power",elf_attack_power)
+        return result[1]
+        
