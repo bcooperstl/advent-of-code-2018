@@ -39,3 +39,6 @@ class AocScreen(object):
             sys.exit()
         self.textmap[y-self.minY][x-self.minX]=value
     
+    def set_multi(self, points, value):
+        for point in points:
+            self.set(point[0], point[1], value)
