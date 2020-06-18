@@ -12,14 +12,17 @@ class AocScreenOverlay(aoc_screen.AocScreen):
         for y in range (0,self.height):
             line = []
             for x in range (0,self.width):
-                if self.textmap[y][x]==self.blankChar:
-                    line.append(self.baseScreen.textmap[y][x])
-                else:
-                    line.append(self.textmap[y][x])
+                line.append(self.get(x,y))
             combined_lines.append(line)
         
         for line in combined_lines:
             print("".join(line))
+    
+    def get(self, x, y):
+        if self.textmap[y][x]==self.blankChar:
+            return self.baseScreen.get(x,y)
+        else:
+            return self.textmap[y][x]
     
     def clear(self, x, y):
         self.set(x, y, self.blankChar)
