@@ -64,3 +64,4 @@
 15|2|day15_test4.txt|3478
 15|2|day15_test5.txt|6474
 15|2|day15_test6.txt|1140
+16|1|day16_test1.txt|1
