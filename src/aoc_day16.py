@@ -36,6 +36,31 @@ class AocDay16(aoc_day.AocDay):
                 total+=1
         return total
     
+    def part2(self, filename, extra_args):
+        lines = fileutils.read_as_list_of_strings(filename)
+        last_after = -1
+        samples = []
+        for i in range(0,len(lines)):
+            if lines[i][0:6]=="Before":
+                sample = {}
+                sample["Before"]=[int(val) for val in lines[i][9:-1].split(", ")]
+                sample["Inst"]=self.ram_to_inst([int(val) for val in lines[i+1].split(" ")])
+                sample["After"]=[int(val) for val in lines[i+2][9:-1].split(", ")]
+                last_after=i+2
+                samples.append(sample)
+        
+        
+        for sample in samples:
+            sample["results"]=self.run_all_operations(sample["Inst"], sample["Before"])
+            sample["matching"]=[]
+            for result in sample["results"].items():
+                if result[1]==sample["After"]:
+                    
+                    sample["matching"].append(result[0])
+            if len(sample["matching"]) >= 3:
+                total+=1
+        return total
+
     # Convert 4 elements from a list to a CPU instructions
     #   element 1 is opcode
     #   element 2 is input A
