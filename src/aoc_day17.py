@@ -114,7 +114,7 @@ class AocDay17(aoc_day.AocDay):
                 elif base_screen.get(current_right_point[0], current_left_point[1]+1) == self.FLOWING:
                     can_work_right = False
                     right_flow_point = current_right_point
-                    #print("Left flow for",current_down_point,"at",current_right_point)
+                    #print("Right flow for",current_down_point,"at",current_right_point)
                 else:
                     current_right_point = (current_right_point[0]+1, current_right_point[1])
             
@@ -157,6 +157,6 @@ class AocDay17(aoc_day.AocDay):
             if flow_point not in worked_flows:
                 flow_points.extend(self.work_flow_point(base_screen, flow_point, ranges))
             worked_flows.append(flow_point)
-            #base_screen.display()
+            base_screen.display()
         return self.calc_filled_area(base_screen, ranges)
     
