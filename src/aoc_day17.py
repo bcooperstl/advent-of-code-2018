@@ -129,15 +129,15 @@ class AocDay17(aoc_day.AocDay):
                     base_screen.set(x, current_down_point[1], self.FLOWING)
         return new_flow_points
     
-    def calc_filled_area(self, base_screen, ranges):
+    def calc_filled_area(self, base_screen, ranges, targets):
         total = 0
         for x in range(ranges["minScreenX"], ranges["maxScreenX"]+1):
             for y in range(ranges["minClayY"], ranges["maxClayY"]+1):
-                if base_screen.get(x,y) in [self.SPREADING, self.FLOWING]:
+                if base_screen.get(x,y) in targets:
                     total += 1
         return total
         
-    def part1(self, filename, extra_args):
+    def work_it(self, filename, targets):
         clay_locations = [self.parse_line(loc) for loc in fileutils.read_as_list_of_strings(filename)]
         ranges = self.find_min_max(clay_locations, self.SPRING_LOCATION)
         print(ranges)
@@ -152,5 +152,10 @@ class AocDay17(aoc_day.AocDay):
                 #base_screen.display()
             worked_flows.append(flow_point)
         base_screen.display()
-        return self.calc_filled_area(base_screen, ranges)
+        return self.calc_filled_area(base_screen, ranges, targets)
     
+    def part1(self, filename, extra_args):
+        return self.work_it(filename, [self.SPREADING, self.FLOWING])
+
+    def part2(self, filename, extra_args):
+        return self.work_it(filename, [self.SPREADING])
