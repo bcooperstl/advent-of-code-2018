@@ -60,7 +60,10 @@ class AocDay17(aoc_day.AocDay):
         current_left_point = None
         current_right_point = None
         # See how far down we can go
-        while base_screen.get(current_down_point[0], current_down_point[1]) in (self.SAND, self.FLOWING):
+        while base_screen.get(current_down_point[0], current_down_point[1]) not in [self.CLAY, self.SPREADING]:
+            if base_screen.get(current_down_point[0], current_down_point[1]) == self.FLOWING and current_down_point != flow_point:
+                print("Flowing down from",flow_point,"met existing flow at",current_down_point)
+                return []
             base_screen.set(current_down_point[0], current_down_point[1], self.FLOWING)
             current_down_point = (current_down_point[0], current_down_point[1]+1)
             if current_down_point[1]>ranges["maxScreenY"]:
@@ -84,16 +87,11 @@ class AocDay17(aoc_day.AocDay):
                     #print("Left edge for",current_down_point,"at",current_left_point)
                     left_edge_point = current_left_point
                 # if there is sand underneath, that is a new flow point to head down
-                elif base_screen.get(current_left_point[0], current_left_point[1]+1) == self.SAND:
+                elif base_screen.get(current_left_point[0], current_left_point[1]+1) in [self.SAND, self.FLOWING]:
                     can_work_left = False
                     left_flow_point = current_left_point
                     #print("Left flow for",current_down_point,"at",current_left_point)
                     new_flow_points.append(left_flow_point)
-                # if there is a flow underneath, join it. no need to add a new flow point
-                elif base_screen.get(current_left_point[0], current_left_point[1]+1) == self.FLOWING:
-                    can_work_left = False
-                    left_flow_point = current_left_point
-                    #print("Left flow for",current_down_point,"at",current_left_point)
                 else:
                     current_left_point = (current_left_point[0]-1, current_left_point[1])
             can_work_right = True
@@ -105,16 +103,11 @@ class AocDay17(aoc_day.AocDay):
                     #print("right edge for",current_down_point,"at",current_right_point)
                     right_edge_point = current_right_point
                 # if there is sand underneath or a flow, that is a new flow point to head down
-                elif base_screen.get(current_right_point[0], current_right_point[1]+1) == self.SAND:
+                elif base_screen.get(current_right_point[0], current_right_point[1]+1) in [self.SAND, self.FLOWING]:
                     can_work_right = False
                     right_flow_point = current_right_point
                     #print("right flow for",current_down_point,"at",current_right_point)
                     new_flow_points.append(right_flow_point)
-                # if there is a flow underneath, join it. no need to add a new flow point
-                elif base_screen.get(current_right_point[0], current_left_point[1]+1) == self.FLOWING:
-                    can_work_right = False
-                    right_flow_point = current_right_point
-                    #print("Right flow for",current_down_point,"at",current_right_point)
                 else:
                     current_right_point = (current_right_point[0]+1, current_right_point[1])
             
@@ -156,7 +149,7 @@ class AocDay17(aoc_day.AocDay):
             flow_point = flow_points.pop(0)
             if flow_point not in worked_flows:
                 flow_points.extend(self.work_flow_point(base_screen, flow_point, ranges))
+                base_screen.display()
             worked_flows.append(flow_point)
-            base_screen.display()
         return self.calc_filled_area(base_screen, ranges)
     
