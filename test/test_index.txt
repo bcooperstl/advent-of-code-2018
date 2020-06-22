@@ -66,4 +66,4 @@
 15|2|day15_test6.txt|1140
 16|1|day16_test1.txt|1
 17|1|day17_test1.txt|57
-17|1|day17_test2.txt|189
+17|1|day17_test2.txt|200

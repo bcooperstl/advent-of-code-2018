@@ -131,7 +131,7 @@ class AocDay17(aoc_day.AocDay):
     
     def calc_filled_area(self, base_screen, ranges):
         total = 0
-        for x in range(ranges["minClayX"], ranges["maxClayX"]+1):
+        for x in range(ranges["minScreenX"], ranges["maxScreenX"]+1):
             for y in range(ranges["minClayY"], ranges["maxClayY"]+1):
                 if base_screen.get(x,y) in [self.SPREADING, self.FLOWING]:
                     total += 1
@@ -149,7 +149,8 @@ class AocDay17(aoc_day.AocDay):
             flow_point = flow_points.pop(0)
             if flow_point not in worked_flows:
                 flow_points.extend(self.work_flow_point(base_screen, flow_point, ranges))
-                base_screen.display()
+                #base_screen.display()
             worked_flows.append(flow_point)
+        base_screen.display()
         return self.calc_filled_area(base_screen, ranges)
     
