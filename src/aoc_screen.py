@@ -27,6 +27,18 @@ class AocScreen(object):
         for line in self.textmap:
             print("".join(line))
     
+    def equals(self, other):
+        if self.minX != other.minX or \
+           self.maxX != other.maxX or \
+           self.minY != other.minY or \
+           self.maxY != other.maxY:
+            return False
+        for y in range(self.minY, self.maxY+1):
+            for x in range (self.minX, self.maxX+1):
+                if self.textmap[y][x] != other.textmap[y][x]:
+                    return False
+        return True
+    
     def get(self, x, y):
         return self.textmap[y-self.minY][x-self.minX]
     
