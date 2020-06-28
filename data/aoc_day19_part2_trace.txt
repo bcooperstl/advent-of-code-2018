@@ -1,0 +1,48 @@
+at 00 - increment reg3 by 16 - result is 16, which sets IP to 17
+at 05 - add reg4 and reg3 and store in reg3.
+    reg3 is 5 going in.
+    reg4 is either 1 if prior reg4 equals reg2 or 0 otherwise
+    If reg4 is 1, the result in reg3 is 6, which sets IP to 7
+    If reg4 is 0, the result in reg3 is 5, which sets IP to 6
+at 06 - increment reg3 by 1 - result is 7, which sets IP to 8
+at 10 - add reg4 and reg3 and store in reg3.
+    reg3 is 10 going in.
+    reg4 is either 1 if reg5>reg2 or 0 otherwise
+    if reg4 is 1, the result is reg3 is 11, which sets IP to 12
+    If reg4 is 0, the result is reg3 is 10, which sets IP to 11
+at 11 - set 2 in reg3, which sets IP to 3
+at 14 - add reg4 and reg3 and store in reg3.
+    reg3 is 14 going in.
+    reg4 is either 1 if reg1>reg2 or 0 otherwise
+    if reg4 is 1, the result is reg3 is 15, which sets IP to 16
+    If reg4 is 0, the result is reg3 is 14, which sets IP to 15
+at 15 - set 1 in reg3, which sets IP to 2
+at 16 - multiply reg3 by reg3 and store in reg3. this sets reg3 to 256 and halts
+at 25 - add reg3 and reg0 and store in reg3
+    *****
+at 26 - store 0 in reg3, which sets IP to 1
+at 35 - store 0 in reg3, which sets IP to 1
+
+17-20:
+    call i = initial reg_2
+    17: reg2 = reg2+2 = i+2
+    18: reg2 = reg2*reg2 = (i+2)(i+2)
+    19: reg2 = reg3*reg2 = 19*(i+2)(i+2)
+    20: reg2 = reg2*11 = 19*(i+2)(i+2)*11 = 209*(i+2)(i+2)
+
+21-23:
+    call j = initial reg_4
+    21: reg4 = reg4+8 = j+8
+    22: reg4 = reg3*reg4 = 22*(j+8)
+    23: reg4 = reg4+12 = 22*(j+8) + 12
+
+24: reg2 = reg2 + reg4 = 209*(i+2)*(i+2) + 22*(j+8) + 12
+
+27-33:
+    27: reg4 = reg3 = 27
+    28: reg4 = reg4 * reg3 = 27*28 = 756
+    29: reg4 = reg3 + reg4 = 756 + 29 = 785
+    30: reg4 = reg3 * reg4 = 30 * 785 = 23550
+    31: reg4 = reg4 * 14 = 23550 * 14 = 329700
+    32: reg4 = reg4 * reg 3 = 329700 * 32 = 10550400
+    33: reg2 = reg2 + 10550400 = 209*(i+2)*(i+2) + 22*(j+8) + 12 + 10550400 = 

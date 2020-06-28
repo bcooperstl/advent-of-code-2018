@@ -1,0 +1,37 @@
+#ip 3
+00 addi 3 16 3  increment reg3 by 16
+01 seti 1 6 1   store 1 in reg1
+02 seti 1 4 5   store 1 in reg5
+03 mulr 1 5 4   reg1*reg5 and store result in reg4
+04 eqrr 4 2 4   commpare reg4 and reg2. store the result (1 if equal, else 0) in reg4
+05 addr 4 3 3   add reg4 and reg3 and store result in reg3
+06 addi 3 1 3   increment reg3 by 1
+07 addr 1 0 0   add reg0 and reg1 and store the result in reg0
+08 addi 5 1 5   increment reg5 by 1
+09 gtrr 5 2 4   compare reg5 and reg2. store result (1 if reg5>reg2, else 0) in reg4
+10 addr 3 4 3   add reg3 and reg4 and store result in reg3
+11 seti 2 6 3   store 2 in reg3
+12 addi 1 1 1   increment reg1 by 1
+13 gtrr 1 2 4   compare reg1 and reg2. store result (1 if reg1>reg2, else 0) in reg4
+14 addr 4 3 3   add reg4 and reg2 and store result in reg3
+15 seti 1 1 3   store 1 in reg3
+16 mulr 3 3 3   multiply reg3 by reg3 and store result in reg3
+17 addi 2 2 2   increment reg2 by 2
+18 mulr 2 2 2   multiply reg2 by reg2 and store result in reg2
+19 mulr 3 2 2   multiply reg3 by reg2 and store result in reg2
+20 muli 2 11 2  multiply reg2 by 11 and store result in reg2
+21 addi 4 8 4   increment reg4 by 8
+22 mulr 4 3 4   multiply reg4 by reg3 and store the result in reg4
+23 addi 4 12 4  increment reg4 by 12
+24 addr 2 4 2   add reg2 and reg4 and store the result in reg2
+25 addr 3 0 3   add reg3 and reg0 and store the result in reg3
+26 seti 0 2 3   store 0 in reg3
+27 setr 3 9 4   store reg3 in reg4
+28 mulr 4 3 4   multiply reg4 by reg3 and store the result in reg4
+29 addr 3 4 4   add reg3 to reg4 and store the result in reg4
+30 mulr 3 4 4   multiply reg3 by reg4 and store the result in reg4
+31 muli 4 14 4  multiply reg4 by 14 and store the result in reg4
+32 mulr 4 3 4   multiply reg4 by reg3 and store the result in reg4
+33 addr 2 4 2   add reg2 and reg4 and store in reg2
+34 seti 0 4 0   set reg0 to 0
+35 seti 0 3 3   set reg3 to 0
