@@ -70,3 +70,4 @@
 17|2|day17_test1.txt|29
 18|1|day18_test1.txt|1147
 19|1|day19_test1.txt|6
+20|1|day20_test1.txt|3
