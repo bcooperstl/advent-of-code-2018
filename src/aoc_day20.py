@@ -46,6 +46,7 @@ class AocDay20(aoc_day.AocDay):
         aoc_day.AocDay.__init__(self, 20)
     
     grid_changes = {'N':(0,-1), 'S':(0,1), 'E':(1,0), 'W':(-1,0)}
+    opposites = {'N':'S', 'S':'N', 'E':'W', 'W':'E'}
     
     def work_sequence(self, route, start, rooms):
         current = start
@@ -56,6 +57,7 @@ class AocDay20(aoc_day.AocDay):
             next = rooms[location]
             current.setDirection(next, step)
             current = next
+        return current
         
     def set_distances_from_start(self, start):
         currentRooms = [start]
@@ -70,13 +72,78 @@ class AocDay20(aoc_day.AocDay):
                         nextRooms.append(neighbor)
             currentRooms = nextRooms
             distance += 1
+    
+    #def make_options(self, path):
+    #    results = [[]]
+    #    for char in path:
+    #        for result in results:
+    #            print(result)
+    #            if len(result) > 0 and result[-1][0] == self.opposites[char]:
+    #                # have an opposite (NS). drop the last one
+    #                del result[-1]
+    #            else:
+    #                result.append([char])
+    #    return results
+    
+    def process_sequences_recursively(self, route, start, rooms):
+        print("Processing", route)
+        head_sequence_start = 0
+        head_sequence_end = -1
+        options_start = []
+        options_end = []
+        tail = ""
+        inHead = True
+        inOptions = False
+        numOptions = 0
+        numParens = 0
+        for i in range(1,len(route)):
+            # found the first ( now into the options
+            if inHead and route[i] == '(':
+                head_sequence_end = i-1
+                numOptions += 1
+                options_start.append(i+1)
+                options_end.append(-1)
+                inOptions = True
+                inHead = False
+            elif inOptions:
+                if route[i] == '(':
+                    numParens += 1
+                elif route[i] == ')':
+                    if numParens == 0:
+                        options_end[numOptions-1] = i - 1
+                        if i != len(route)-1:
+                            tail = route[i+1:]
+                        break
+                    else:
+                        numParens -= 1
+                elif route[i] == '|':
+                    if numParens == 0:
+                        options_end[numOptions-1] = i - 1
+                        options_start.append(i+1)
+                        options_end.append(-1)
+                        numOptions += 1
+
+        # all is just one sequence. set head_sequence_end to the 
+        if inHead and head_sequence_end == -1:
+            head_sequence_end = len(route)-1
         
+        head = route[head_sequence_start:head_sequence_end+1]
+        print("Head is:",head)
+        endHead = self.work_sequence(head, start, rooms);
+        
+        for i in range(0,numOptions):
+            option = route[options_start[i]:options_end[i]+1]
+            print("Option",i,"is",option)
+            self.process_sequences_recursively(option+tail, endHead, rooms)
+    
     def part1(self, filename, extra_args):
         start_data = fileutils.read_as_string(filename)
         start_room = Day20Room((0, 0))
         start_room.distance = 0
         rooms = {(0,0):start_room}
-        self.work_sequence(start_data[1:-1], start_room, rooms)
+        #paths = self.make_options(start_data[1:-1])
+        #print(paths)
+        self.process_sequences_recursively(start_data[1:-1], start_room, rooms)
         self.set_distances_from_start(start_room)
         maxDistance = max([room.distance for room in rooms.values()])
         return maxDistance
