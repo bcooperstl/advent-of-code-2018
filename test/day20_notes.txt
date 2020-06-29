@@ -1,0 +1,15 @@
+^ENWWW(NEEE|SSE(EE|N))$
+
+process_recusrively(start, "ENWWW(NEEE|SSE(EE|N))NNN"):
+    end1 = work_sequence(start, "ENWWW")
+    process_recusrively(end1, "NEEENNN")
+    process_recusrively(end1, "SSE(EE|N)NNN")
+
+process_recusrively(end1, "NEEENNN")
+    end2 = work_sequence(end1, "NEEENNN")
+
+process_recusrively(end1, "SSE(EE|N)NNN")
+    end3 = work_sequence(end1, "SSE")
+    process_recusrively(end3, "EENNN")
+    process_recusrively(end3, "NNNN")
+
