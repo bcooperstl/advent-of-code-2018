@@ -171,4 +171,14 @@ class AocDay20(aoc_day.AocDay):
         maxDistance = max([room.distance for room in rooms.values()])
         return maxDistance
     
-    
+    def part2(self, filename, extra_args):
+        start_data = fileutils.read_as_string(filename)
+        start_room = Day20Room((0, 0))
+        start_room.distance = 0
+        rooms = {(0,0):start_room}
+        #paths = self.make_options(start_data[1:-1])
+        #print(paths)
+        self.process_sequences_recursively(start_data[1:-1], start_room, rooms,0)
+        self.set_distances_from_start(start_room)
+        total = sum(1 for room in rooms.values() if room.distance >= 1000)
+        return total
