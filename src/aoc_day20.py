@@ -85,8 +85,29 @@ class AocDay20(aoc_day.AocDay):
     #                result.append([char])
     #    return results
     
-    def process_sequences_recursively(self, route, start, rooms):
-        print("Processing", route)
+    def is_net_no_movement(self, route):
+        for i in range(0,len(route)):
+            if route[i] not in self.opposites:
+                return False
+            if route[0-i-1] != self.opposites[route[i]]:
+                return False
+        return True
+    
+    def optimize_options(self, options):
+        hasEmpty = False
+        hasNetNoMovement = False
+        
+        for option in options:
+            if self.is_net_no_movement(option):
+                hasNetNoMovement = True
+            if option == "":
+                hasEmpty = True
+        
+        if hasEmpty and hasNetNoMovement:
+            options.remove("")
+        return options
+        
+    def process_sequences_recursively(self, route, start, rooms, depth):
         head_sequence_start = 0
         head_sequence_end = -1
         options_start = []
@@ -96,7 +117,7 @@ class AocDay20(aoc_day.AocDay):
         inOptions = False
         numOptions = 0
         numParens = 0
-        for i in range(1,len(route)):
+        for i in range(0,len(route)):
             # found the first ( now into the options
             if inHead and route[i] == '(':
                 head_sequence_end = i-1
@@ -128,13 +149,15 @@ class AocDay20(aoc_day.AocDay):
             head_sequence_end = len(route)-1
         
         head = route[head_sequence_start:head_sequence_end+1]
-        print("Head is:",head)
+        #print("Head is:",head)
         endHead = self.work_sequence(head, start, rooms);
         
-        for i in range(0,numOptions):
-            option = route[options_start[i]:options_end[i]+1]
-            print("Option",i,"is",option)
-            self.process_sequences_recursively(option+tail, endHead, rooms)
+        #TODO: Check for situation where one option is net-zero (NWES) and other option is nothing. In that case, skip the nothing option.
+        options = [route[options_start[i]:options_end[i]+1] for i in range(0,numOptions)]
+        options = self.optimize_options(options)
+        
+        for option in options:
+            self.process_sequences_recursively(option+tail, endHead, rooms, depth+1)
     
     def part1(self, filename, extra_args):
         start_data = fileutils.read_as_string(filename)
@@ -143,7 +166,7 @@ class AocDay20(aoc_day.AocDay):
         rooms = {(0,0):start_room}
         #paths = self.make_options(start_data[1:-1])
         #print(paths)
-        self.process_sequences_recursively(start_data[1:-1], start_room, rooms)
+        self.process_sequences_recursively(start_data[1:-1], start_room, rooms,0)
         self.set_distances_from_start(start_room)
         maxDistance = max([room.distance for room in rooms.values()])
         return maxDistance
