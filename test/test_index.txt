@@ -77,3 +77,4 @@
 20|1|day20_test4.txt|23
 20|1|day20_test5.txt|31
 22|1|day22_test1.txt|114
+22|2|day22_test1.txt|45
