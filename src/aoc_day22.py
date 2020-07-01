@@ -14,6 +14,10 @@ class AocDay22(aoc_day.AocDay):
     MOUTH = "M"
     TARGET = "T"
     
+    other_equip = {ROCKY:{"torch":"climbing","climbing":"torch"}, \
+                   WET:{"climbing":"neither","neither":"climbing"}, \
+                   NARROW:{"torch":"neither","neither":"torch"}}
+
     def get_geologic_index(self, region, regions, target):
         if region["x"] == 0 and region["y"] == 0:
             return 0
@@ -73,4 +77,73 @@ class AocDay22(aoc_day.AocDay):
         return self.area_total_risk(regions, target)
         
         
+    def add_times(self, regions):
+        for row in regions:
+            for region in row:
+                if region["type"] == self.ROCKY:
+                    region["times"]={"torch":None,"climbing":None}
+                elif region["type"] == self.WET:
+                    region["times"]={"climbing":None,"neither":None}
+                else:
+                    region["times"]={"torch":None,"neither":None}
         
+    def get_neighbors(self, regions, x, y):
+        neighbors = []
+        #north
+        if y > 0:
+            neighbors.append(regions[y-1][x])
+        #south
+        if y < len(regions) - 1:
+            neighbors.append(regions[y+1][x])
+        #west
+        if x > 0:
+            neighbors.append(regions[y][x-1])
+        #east
+        if x < len(regions[0]) - 1:
+            neighbors.append(regions[y][x+1])
+        return neighbors
+    
+    def part2(self, filename, extra_args):
+        inputs = fileutils.read_as_list_of_strings(filename)
+        depth = int(inputs[0].split(" ")[1])
+        target = {"x":int(inputs[1].split(" ")[1].split(",")[0]), \
+                  "y":int(inputs[1].split(" ")[1].split(",")[1])}
+        print("Depth:",depth)
+        print("Target:",target)
+        maxX = int(target["x"]*1.5)
+        maxY = int(target["y"]*1.5)
+        regions = self.allocate_regions(maxX, maxY)
+        self.work_regions(regions, target, depth)
+        self.add_times(regions)
+        
+        regions[0][0]["times"]["torch"] = 0
+        regions[0][0]["times"][self.other_equip[regions[0][0]["type"]]["torch"]] = 7
+        print(regions[0][0])
+        
+        time = 0
+        while regions[target["y"]][target["x"]]["times"]["torch"] is None or regions[target["y"]][target["x"]]["times"]["torch"] > (time - 10):
+            print("Time is",time)
+            for row in regions:
+                for region in row:
+                    #print(region["times"])
+                    for equip, visit_time in region["times"].items():
+                        if time == visit_time:
+                            print("Analyzing region",region["x"],region["y"],"with",equip,"at time",time)
+                            neighbors = self.get_neighbors(regions, region["x"], region["y"])
+                            for neighbor in neighbors:
+                                #print(neighbor)
+                                if equip in neighbor["times"]:
+                                    print(" Can enter neighbor",neighbor["x"],neighbor["y"])
+                                    if neighbor["times"][equip] is None:
+                                        print("  Setting first entry with",equip,"at time",time+1)
+                                        neighbor["times"][equip] = time + 1
+                                    elif neighbor["times"][equip] > (time + 1):
+                                        print("  Updating entry with",equip,"at time",time+1)
+                                        neighbor["times"][equip] = time + 1
+                                    neighbor_other_equip = self.other_equip[neighbor["type"]][equip]
+                                    if neighbor["times"][neighbor_other_equip] is None:
+                                        print("  Setting first entry with other equip",neighbor_other_equip,"at time",time + 8) # + 1 to get there and + 7 to change
+                                        neighbor["times"][neighbor_other_equip] = time + 8
+            time += 1
+        
+        return regions[target["y"]][target["x"]]["times"]["torch"]
