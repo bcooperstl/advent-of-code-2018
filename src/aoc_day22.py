@@ -110,8 +110,8 @@ class AocDay22(aoc_day.AocDay):
                   "y":int(inputs[1].split(" ")[1].split(",")[1])}
         print("Depth:",depth)
         print("Target:",target)
-        maxX = int(target["x"]*1.5)
-        maxY = int(target["y"]*1.5)
+        maxX = int(target["x"]*5)
+        maxY = int(target["y"]*2)
         regions = self.allocate_regions(maxX, maxY)
         self.work_regions(regions, target, depth)
         self.add_times(regions)
@@ -120,30 +120,36 @@ class AocDay22(aoc_day.AocDay):
         regions[0][0]["times"][self.other_equip[regions[0][0]["type"]]["torch"]] = 7
         print(regions[0][0])
         
+        regions_hit = [regions[0][0]]
+        
         time = 0
         while regions[target["y"]][target["x"]]["times"]["torch"] is None or regions[target["y"]][target["x"]]["times"]["torch"] > (time - 10):
             print("Time is",time)
-            for row in regions:
-                for region in row:
-                    #print(region["times"])
-                    for equip, visit_time in region["times"].items():
-                        if time == visit_time:
-                            print("Analyzing region",region["x"],region["y"],"with",equip,"at time",time)
-                            neighbors = self.get_neighbors(regions, region["x"], region["y"])
-                            for neighbor in neighbors:
-                                #print(neighbor)
-                                if equip in neighbor["times"]:
-                                    print(" Can enter neighbor",neighbor["x"],neighbor["y"])
-                                    if neighbor["times"][equip] is None:
-                                        print("  Setting first entry with",equip,"at time",time+1)
-                                        neighbor["times"][equip] = time + 1
-                                    elif neighbor["times"][equip] > (time + 1):
-                                        print("  Updating entry with",equip,"at time",time+1)
-                                        neighbor["times"][equip] = time + 1
-                                    neighbor_other_equip = self.other_equip[neighbor["type"]][equip]
-                                    if neighbor["times"][neighbor_other_equip] is None:
-                                        print("  Setting first entry with other equip",neighbor_other_equip,"at time",time + 8) # + 1 to get there and + 7 to change
-                                        neighbor["times"][neighbor_other_equip] = time + 8
+            for region in regions_hit:
+                for equip, visit_time in region["times"].items():
+                    if time == visit_time:
+                        #print("Analyzing region",region["x"],region["y"],"with",equip,"at time",time)
+                        neighbors = self.get_neighbors(regions, region["x"], region["y"])
+                        for neighbor in neighbors:
+                            #print(neighbor)
+                            if equip in neighbor["times"]:
+                                #print(" Can enter neighbor",neighbor["x"],neighbor["y"])
+                                if neighbor["times"][equip] is None:
+                                    #print("  Setting first entry with",equip,"at time",time+1)
+                                    neighbor["times"][equip] = time + 1
+                                elif neighbor["times"][equip] > (time + 1):
+                                    #print("  Updating entry with",equip,"at time",time+1)
+                                    neighbor["times"][equip] = time + 1
+                                neighbor_other_equip = self.other_equip[neighbor["type"]][equip]
+                                if neighbor["times"][neighbor_other_equip] is None:
+                                    #print("  Setting first entry with other equip",neighbor_other_equip,"at time",time + 8) # + 1 to get there and + 7 to change
+                                    neighbor["times"][neighbor_other_equip] = time + 8
+                            if neighbor not in regions_hit:
+                                regions_hit.append(neighbor)
+            for region in regions_hit:
+                times = region["times"].values();
+                if None not in times and (min(times) < (time - 30)):
+                    regions_hit.remove(region)
             time += 1
         
         return regions[target["y"]][target["x"]]["times"]["torch"]
