@@ -79,3 +79,4 @@
 22|1|day22_test1.txt|114
 22|2|day22_test1.txt|45
 23|1|day23_test1.txt|7
+23|2|day23_test2.txt|36
